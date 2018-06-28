@@ -1,3 +1,4 @@
+
 import argparse
 import csv
 import os
@@ -39,6 +40,7 @@ def send_scrape_request(insta_url: str, total_count: int=50, existing: set=None,
     imgs = set()
     count = 0
     page = 0
+    print(total_count)
     while count < total_count:
         req.html.render(scrolldown=page)
         images = req.html.xpath(IMG_XPATH)  
@@ -115,14 +117,15 @@ def main(tags: List[str], users: List[str], total_count: int=50, should_continue
                 except:
                     print(f'An error occured while downloading {url}')
                 else:
+                    file_index = count + 1
                     writer.writerow([
-                        f'{count}.jpg',
+                        f'{file_index}.jpg',
                         url,
                         caption.replace('\n', '\\n'),
                         ', '.join(hashtags),
                         ', '.join(mentions)
                     ])
-                    print(f'[{target}] downloaded {url} as {count}.jpg in data/{target}')
+                    print(f'[{target}] downloaded {url} as {file_index}.jpg in data/{target}')
 
     targets = {'tags': tags, 'users': users}
     for mode,lists in targets.items():
