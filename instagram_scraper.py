@@ -40,7 +40,6 @@ def send_scrape_request(insta_url: str, total_count: int=50, existing: set=None,
     imgs = set()
     count = 0
     page = 0
-    print(total_count)
     while count < total_count:
         req.html.render(scrolldown=page)
         images = req.html.xpath(IMG_XPATH)  
@@ -139,7 +138,6 @@ def main(tags: List[str], users: List[str], total_count: int=50, should_continue
                     for i, row in enumerate(reader):
                         existing_links.add(row[1])
                     start = i + 1
-            print(target)
             _single_input_processing(target, total_count, existing_links, start, mode=mode)
 
 if __name__ == '__main__':
