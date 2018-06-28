@@ -44,7 +44,6 @@ def send_scrape_request(insta_url: str, total_count: int=50, existing: set=None,
         images = req.html.xpath(IMG_XPATH)  
         page += 1
         for image in images:
-            count += 1
             if count > total_count:
                 break
             try:
@@ -61,6 +60,7 @@ def send_scrape_request(insta_url: str, total_count: int=50, existing: set=None,
             imgs.add(url)
             hashtags = set(REGEXES['hashtag'].findall(caption))
             mentions = set(REGEXES['username'].findall(caption))
+            count += 1
             yield url, caption, hashtags, mentions
 
 
