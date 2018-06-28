@@ -39,12 +39,12 @@ def send_scrape_request(insta_url: str, total_count: int=50, existing: set=None,
     imgs = set()
     count = 0
     page = 0
-    while count <= total_count:
+    while count < total_count:
         req.html.render(scrolldown=page)
         images = req.html.xpath(IMG_XPATH)  
         page += 1
         for image in images:
-            if count > total_count:
+            if count >= total_count:
                 break
             try:
                 url, caption = image.attrs['src'], image.attrs['alt']
