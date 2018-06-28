@@ -17,10 +17,20 @@ REGEXES = {
     'username': re.compile('(?:@)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)'),
 }
 
+# In case Instagram switches it up on us
 IMG_XPATH = '//img[@alt]'
 
 def send_scrape_request(insta_url: str, total_count: int=50, existing: set=None, short_circuit: bool=False):
     """
+        :param insta_url:
+            Instagram url to scrape
+        :param total_count:
+            Total amount of images to scrape
+        :param existing:
+            URLs to skip
+        :param short_circuit:
+            Whether or not to short_circuit total_count loop 
+            
     Yields url, captions, hashtags, and mentions for provided insta url
     """
     session = HTMLSession()
@@ -65,6 +75,8 @@ def scrape_instagram(target: str, total_count: int=50, existing: set=None, mode:
         URLs to skip
     :param mode
         Two options: 'tags' or 'users'. Determines whether we are scraping users or tags
+        
+    Builds url and sets short_circuit based on target and then issues request to url
     """
     if mode == 'users':
         short_circuit = True
@@ -77,6 +89,18 @@ def scrape_instagram(target: str, total_count: int=50, existing: set=None, mode:
 
 
 def main(tags: List[str], users: List[str], total_count: int=50, should_continue: bool=False):
+    """
+    :param tags:
+        List of tags to be scraped
+    :param users:
+        List of users to be scraped
+    :param total_count:
+        total number of images to be scraped
+    :param should_continue
+        Flag for whether or not we should read from disk and skip existing URLs
+        
+    Scrapes user and hashtag images from Instagram
+    """
     def _single_input_processing(target: str, total_count: int, existing_links: set, start: int, mode: str='tag'):
         os.makedirs(f'data/{target}', exist_ok=True)
         with open(f'data/{target}/data.csv', 'a' if existing_links else 'w', newline='', encoding='utf-8') as csvfile:
